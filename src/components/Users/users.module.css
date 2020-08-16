@@ -1,0 +1,11 @@
+.userPhoto {
+     width: 100px;
+    height: 100px;
+}
+.userContainer{
+    margin: 20px 0 0 15px;
+}
+.userContainer > div + div {
+    margin-top: 15px;
+}
+

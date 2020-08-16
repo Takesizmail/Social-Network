@@ -1,0 +1,25 @@
+.selectedPage {
+    font-weight: bold;
+}
+.numberPage {
+    margin: 5px;
+    cursor: pointer;
+}
+.paginatorContainer{
+    display: flex;
+    margin-top: 30px;
+    justify-content: center;
+    margin-bottom: 100px;
+    align-items: center;
+}
+.paginatorButton{
+    background: #05267f;
+    border: 1px solid #041d63;
+    border-radius: 3px;
+    outline: none;
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+
+}

@@ -23,14 +23,23 @@ const SET_ME = 'auth/SET_ME';
 //     login: getLoggedInUser().login ? getLoggedInUser().login : null,
 //     isAuth: false
 // };
-let initialState = {
-    userId:  null,
-    email:  null,
-    login: null,
-    isAuth: false
+
+type InitialStateType2 = {
+    userId:  number | null,
+    email:  string | null,
+    login: string | null,
+    isAuth: boolean
 };
 
-const authReducer = (state = initialState, action) => {
+let initialState  = {
+    userId:  null as null | number,
+    email:  null as null | string,
+    login: null as null | string,
+    isAuth: false as boolean
+};
+export type InitialStateType = typeof initialState
+
+const authReducer = (state = initialState, action:any):InitialStateType2 => {
     switch (action.type) {
         case SET_USER_DATA:
             return {
@@ -55,12 +64,30 @@ const authReducer = (state = initialState, action) => {
     }
 }
 
+type SetAuthUserDataPayloadType={
+    userId: number,
+    email: string,
+    login: string
+}
 
-export const setAuthUserData = (userId, email, login) => ({type: SET_USER_DATA, payload: {userId, email, login}  })
-export const setAuthOff = () => ({type: SET_AUTH_OFF})
-export const setMe = () =>({type: SET_ME})
+type SetAuthUserDataType = {
+    type : typeof SET_USER_DATA,
+    payload : SetAuthUserDataPayloadType
+}
 
-export const getAboutMe = (services,history) => async (dispatch) =>{
+type setAuthOffActionType = {
+    type : typeof SET_AUTH_OFF
+}
+
+type setMeActionType = {
+    type: typeof SET_ME
+}
+export const setAuthUserData = (userId: number, email: string, login: string): SetAuthUserDataType => ({type: SET_USER_DATA, payload: {userId, email, login}  })
+
+export const setAuthOff = (): setAuthOffActionType => ({type: SET_AUTH_OFF})
+export const setMe = (): setMeActionType =>({type: SET_ME})
+
+export const getAboutMe = (services: any, history: any) => async (dispatch: any) =>{
     let response = await services.getMe()
             if (response.data.resultCode === 0) {
                 let {id, login, email} = response.data.data;
@@ -69,14 +96,14 @@ export const getAboutMe = (services,history) => async (dispatch) =>{
                 history.push("/profile");
             }
 };
-export const login =  (services, history, email, password, rememberMe) => async (dispatch) =>{
+export const login =  (services: any, history: any , email: string, password: string, rememberMe: boolean) => async (dispatch: any) =>{
     let response = await services.login(email,password,rememberMe)
     if (response.data.resultCode === 0) {
         dispatch(getAboutMe(services,history));
     }
 };
 
-export const logout = (services) => async (dispatch) =>{
+export const logout = (services:any) => async (dispatch : any) =>{
     let response = await services.logout()
             if (response.data.resultCode === 0) {
                 dispatch(setAuthOff());

@@ -3,7 +3,7 @@ import {addPostActionCreator} from "../../../redux/profile-reducer";
 import MyPosts from "./MyPosts";
 import {connect} from "react-redux";
 import {reset} from "redux-form";
-import {getNewPostText, getPosts} from "../../../redux/users-selectors";
+import {getNewPostText, getPosts} from "../../../redux/users-selectorst";
 
 const mapStateToProps = (state) => {
     return {

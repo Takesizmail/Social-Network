@@ -2,10 +2,10 @@ import React,{Suspense} from 'react';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
 import {Route, Switch,Redirect} from "react-router-dom";
-// import DialogsContainer from "./components/Dialogs/DialogsContainer";
+import DialogsContainer from "./components/Dialogs/DialogsContainer";
 
 
-import HeaderContainer from "./components/Header/HeaderContainer";
+import HeaderContainer from "./components/Header/HeaderContainerе";
 import Login from "./components/login/login.jsx";
 
 import ProfileContainer from "./components/Profile/ProfileContainer";
@@ -13,7 +13,7 @@ import ProfileContainer from "./components/Profile/ProfileContainer";
 
 // const ProfileContainer = React.lazy(()=> import("./components/Profile/ProfileContainer"));
 const UsersContainer = React.lazy(()=> import("./components/Users/UsersContainer"))
-const DialogsContainer = React.lazy(()=> import("./components/Dialogs/DialogsContainer"))
+// const DialogsContainer = React.lazy(()=> import("./components/Dialogs/DialogsContainer"))
 const App = () => {
 
     return (
@@ -31,19 +31,19 @@ const Router = () =>{
         <React.Fragment>
             <Switch>
             <Route path='/dialogs'
-                   render={ () =>{ return <Suspense fallback={<div>...Loading</div>}>
-                       <DialogsContainer />
-                   </Suspense>
-                    }} exact/>
+                   render={ () => {
+                       return <Suspense fallback={<div>...Loading</div>}>
+                           <DialogsContainer/>
+                       </Suspense>
+                   }} exact/>
 
             <Route path='/profile/:userId?'
                    render={ () => <ProfileContainer />}
-
                    exact/>
 
             <Route path='/users'
                    render={ () =>{ return <Suspense fallback={<div>...Loading</div>}>
-                       <UsersContainer />
+                       <UsersContainer pageTitle=" User Container" />
                    </Suspense>
                    }} exact/>
                    

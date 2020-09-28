@@ -3,10 +3,21 @@ import styles from "./users.module.css";
 import userPhoto from "../../assets/images/user.png";
 import {NavLink} from "react-router-dom";
 import {withKamasutraApi} from '../hoc'
+import {UserType} from "../../types/redux-types";
 
-const User = ({user,followingInProgress,follow,unfollow,services}) => {
-    const disabled = (followingInProgress,idx) =>{
-        return followingInProgress.some(id => id===idx)
+type PropsType = {
+    user: UserType,
+    followingInProgress:Array<UserType>,
+    follow:(services:()=> any,userId: number)=>void ,
+    unfollow:(services:()=> any, userId: number)=>void,
+    services:()=>any,
+}
+
+
+const User:React.FC<PropsType> = ({user,followingInProgress,follow,unfollow,services}) => {
+    console.log(followingInProgress, user)
+    const disabled = (followingInProgress:Array<any>,idx:number) =>{
+        return followingInProgress.some((id: number) => id===idx)
     }
 
     return (

@@ -2,11 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {
     follow,
-    setCurrentPage,
-    setUsers,
-    setTotalUsersCount,
-    toggleIsFetching,
-    unfollow, toggleFollowingProgress, getUsers
+    unfollow, getUsers
 } from '../../redux/users-reducer';
 import Users from './Users';
 import Preloader from "../common/Preloader/Preloader";
@@ -18,17 +14,39 @@ import {
     getPageSize,
     getTotalUsersCount,
     getUsersSelectors
-} from "../../redux/users-selectors";
+} from "../../redux/users-selectorst";
+import {UserType} from "../../types/redux-types";
+import {AppStateType} from "../../redux/redux-store";
 
 
+type MapStatePropsType = {
+    totalUsersCount: number,
+    pageSize: number,
+    currentPage: number,
+    isFetching: boolean,
+    users:Array<UserType>,
+    followingInProgress:Array<number>,
+}
+type MapDispatchPropsType = {
+    follow:(services: any,userId: number)=>any ,
+    unfollow:(services: any,userId: number)=>any,
+    getUsers: (services:()=>any, currentPage:number, pageSize:number)=> void
 
-class UsersContainer extends React.Component {
+}
+type OwnPropsType = {
+    pageTitle: string,
+    services:()=>any,
+}
+
+type PropsType = MapStatePropsType & MapDispatchPropsType & OwnPropsType
+
+class UsersContainer extends React.Component<PropsType> {
     componentDidMount() {
         const {getUsers,currentPage,pageSize,services} = this.props;
         getUsers(services,currentPage,pageSize)
     }
 
-    onPageChanged = (pageNumber) => {
+    onPageChanged = ( pageNumber:number ) => {
         const {getUsers,pageSize,services} = this.props;
         getUsers(services,pageNumber,pageSize)
 
@@ -51,9 +69,9 @@ class UsersContainer extends React.Component {
     }
 }
 
-let mapStateToProps = (state) => {
+let mapStateToProps = (state:AppStateType) => {
     return {
-        users: getUsersSelectors(state),
+        users:  getUsersSelectors(state),
         pageSize: getPageSize(state),
         totalUsersCount: getTotalUsersCount(state),
         currentPage: getCurrentPage(state),
@@ -62,15 +80,12 @@ let mapStateToProps = (state) => {
     }
 };
 const mapDispatchToProps = {
-    follow, unfollow, setUsers,
-    setCurrentPage, setTotalUsersCount, toggleIsFetching,
-    toggleFollowingProgress,
-    getUsers
+    follow, unfollow, getUsers
 };
 
 
 export default compose(
-    connect(mapStateToProps, mapDispatchToProps),
+    connect<MapStatePropsType,MapDispatchPropsType, OwnPropsType,AppStateType>(mapStateToProps, mapDispatchToProps),
     withKamasutraApi(),
     withAuthRedirect
 

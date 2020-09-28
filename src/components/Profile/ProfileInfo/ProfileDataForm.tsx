@@ -1,13 +1,25 @@
-import React, {useEffect} from "react";
+import React, {ComponentType, FormEvent, useEffect} from "react";
 import Contacts from "./ContactsCreator";
-import {Field, reduxForm} from "redux-form";
+import {Field, InjectedFormProps, reduxForm} from "redux-form";
 import s from "./ProfileInfo.module.css";
 import {connect} from "react-redux";
+import {AppStateType} from "../../../redux/redux-store";
 
-const ProfileDataForm = ({isOwner,editDeactivate,dataForms,saveProfile,initialValues,error})=>{
-    const handleSubmit = async  (e)=>{
-        e.preventDefault()
-         saveProfile(dataForms)
+interface Props extends InjectedFormProps{
+    isOwner:boolean
+    editDeactivate:(bool:boolean)=>void
+    saveProfile:(dataForm:any)=>void
+    initialValues:any
+    dataForms:any,
+    error: any,
+    onSubmit: ()=>any
+}
+
+
+const ProfileDataForm: React.FC<Props> = ({onSubmit,isOwner,editDeactivate,dataForms,saveProfile,initialValues,error})=>{
+    const handleSubmit = (event: FormEvent<HTMLFormElement>):void =>{
+        event.preventDefault()
+        saveProfile(dataForms)
         editDeactivate(false)
 
     }
@@ -46,7 +58,12 @@ const ProfileDataForm = ({isOwner,editDeactivate,dataForms,saveProfile,initialVa
         <div> {isOwner &&<button type="submit" >close edit mode</button>}</div>
     </form>
 }
-const ContactFormCreator = ({contactTitle})=>{
+
+type PropsContactForm = {
+    contactTitle: any
+}
+
+const ContactFormCreator: ComponentType<PropsContactForm> = ({contactTitle})=>{
     return <div key={contactTitle} className={s.contact}>
         <label><b>{contactTitle}: </b> </label>
         <Field name={`contacts.${contactTitle}`} placeholder={contactTitle} type="text" component="input" />
@@ -57,8 +74,14 @@ const ContactFormCreator = ({contactTitle})=>{
 
 let ProfileForm =  reduxForm({
     form: 'profileForm',
-
+// @ts-ignore
 })(ProfileDataForm)
 
+const mapStateToProps = (state:AppStateType) =>({
+    dataForms : state.form.profileForm
+})
 
-export default connect(state=>({dataForms : state.form.profileForm}))(ProfileForm)
+
+
+
+export default connect(mapStateToProps )(ProfileForm)
